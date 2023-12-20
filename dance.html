@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Dance Files</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link the external CSS file -->
+    <style>
+        /* Additional styles for dance.html */
+        /* ... (your existing styles) ... */
+
+        /* Style for uploaded video preview */
+        #videoPreviews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .uploaded-video {
+            position: relative;
+        }
+
+        .uploaded-video video {
+            max-width: 200px;
+            border-radius: 5px;
+        }
+
+        .delete-btn {
+            position: relative;
+            top: 5px;
+            right: 5px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Dance</h1>
+
+        <div class="upload-section">
+            <input type="file" id="danceFiles" accept=".mp4, .avi, .mov" multiple onchange="previewFiles()"> <!-- Accept multiple specific video file types -->
+            <label for="danceFiles" class="custom-file-upload">Upload Your Files</label>
+            <p id="selectedFiles">No files selected</p>
+            <button onclick="uploadFiles()">Upload</button>
+        </div>
+
+        <div class="uploaded-files">
+            <h2>Uploaded files</h2>
+            <div id="uploadedFiles">
+                <!-- Display uploaded dance files here -->
+            </div>
+        </div>
+
+        <!-- Display uploaded video previews -->
+        <div id="videoPreviews"></div>
+    </div>
+
+    <script>
+        let filesArray = []; // Array to store selected files
+
+        // Function to preview the selected dance files before upload
+        function previewFiles() {
+            const fileInput = document.getElementById('danceFiles');
+            const files = fileInput.files;
+            const videoPreviewsContainer = document.getElementById('videoPreviews');
+
+            videoPreviewsContainer.innerHTML = '';
+            filesArray = [];
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                filesArray.push(file);
+
+                // Create video preview
+                const uploadedVideoContainer = document.createElement('div');
+                uploadedVideoContainer.classList.add('uploaded-video');
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.innerText = 'Delete';
+                deleteBtn.onclick = function () {
+                    deleteFile(i);
+                };
+
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(file);
+                video.controls = true;
+
+                uploadedVideoContainer.appendChild(video);
+                uploadedVideoContainer.appendChild(deleteBtn);
+                videoPreviewsContainer.appendChild(uploadedVideoContainer);
+            }
+
+            document.getElementById('selectedFiles').innerText = files.length > 0 ? `${files.length} files selected` : 'No files selected';
+        }
+
+        // Function to delete a specific file
+        function deleteFile(index) {
+            filesArray.splice(index, 1); // Remove the file from the array
+            const videoPreviewsContainer = document.getElementById('videoPreviews');
+            videoPreviewsContainer.removeChild(videoPreviewsContainer.childNodes[index]); // Remove the video preview
+        }
+
+        // Function to upload the selected files (You can implement this functionality)
+        function uploadFiles() {
+            // Implement file upload logic here using 'filesArray'
+            // This function can handle uploading the files to the server
+            // For example, you can use FormData to upload files via AJAX
+            // const formData = new FormData();
+            // filesArray.forEach(file => formData.append('files', file));
+            // Then use fetch or XMLHttpRequest to send the data to the server
+        }
+    </script>
+</body>
+
+</html>
